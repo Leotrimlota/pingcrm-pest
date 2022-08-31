@@ -11,6 +11,9 @@
 |
 */
 
+use App\Models\Account;
+use App\Models\User;
+
 uses(Tests\TestCase::class)->in('Feature');
 
 /*
@@ -39,7 +42,14 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function login($user = null)
 {
-    // ..
+    $userFactory = User::factory()->create([
+        'account_id' => Account::create(['name' => 'Acme Corporation'])->id,
+        'first_name' => 'John',
+        'last_name' => 'Doe',
+        'email' => 'johndoe@example.com',
+        'owner' => true,
+    ]);
+    return test()->actingAs($user ?? $userFactory);
 }
