@@ -5,7 +5,7 @@ use App\Models\Contact;
 use function Pest\Faker\faker;
 
 
-it('can store a contact', function () {
+it('can store a contact', function ($email) {
 
     login()->post('/contacts', [
         'first_name' => faker()->firstName,
@@ -17,7 +17,7 @@ it('can store a contact', function () {
         'region' => 'Derbyshire',
         'country' => faker()->randomElement(['us', 'ca']),
         'postal_code' => faker()->postCode,
-    ])->assertRedirect('/contacts')->assertSessionHas('success','Contact created.');
+    ])->assertRedirect('/contacts')->assertSessionHas('success', 'Contact created.');
 
     expect(Contact::latest()->first())
         ->first_name->toBeString()->not()->toBeEmpty()
@@ -29,4 +29,4 @@ it('can store a contact', function () {
         ->country->toBeIn(['us', 'ca']);
 
 
-});
+})->with('valid emails');
